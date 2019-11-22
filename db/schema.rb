@@ -482,6 +482,7 @@ ActiveRecord::Schema.define(version: 20181205201208) do
     t.integer  "version_num",        limit: 4
     t.integer  "round",              limit: 4
     t.boolean  "is_submitted",                     default: false
+    t.integer  "visibility",         limit: 4
   end
 
   add_index "responses", ["map_id"], name: "fk_response_response_map", using: :btree
@@ -532,6 +533,16 @@ ActiveRecord::Schema.define(version: 20181205201208) do
 
   add_index "roles_permissions", ["permission_id"], name: "fk_roles_permission_permission_id", using: :btree
   add_index "roles_permissions", ["role_id"], name: "fk_roles_permission_role_id", using: :btree
+
+  create_table "samplereviewmaps", force: :cascade do |t|
+    t.integer  "response_map_id", limit: 4
+    t.integer  "assignment_id",   limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "samplereviewmaps", ["assignment_id"], name: "fk_rails_f36332ce9b", using: :btree
+  add_index "samplereviewmaps", ["response_map_id"], name: "fk_rails_5c8b16c16d", using: :btree
 
   create_table "score_views", id: false, force: :cascade do |t|
     t.integer  "question_weight",       limit: 4
@@ -630,7 +641,6 @@ ActiveRecord::Schema.define(version: 20181205201208) do
     t.string  "status",            limit: 255
     t.string  "unityID",           limit: 255
     t.string  "signup_preference", limit: 255
-    t.string  "feedback",          limit: 255
   end
 
   create_table "survey_deployments", force: :cascade do |t|
@@ -807,6 +817,8 @@ ActiveRecord::Schema.define(version: 20181205201208) do
   add_foreign_key "resubmission_times", "participants", name: "fk_resubmission_times_participants"
   add_foreign_key "review_comment_paste_bins", "review_grades"
   add_foreign_key "review_grades", "participants"
+  add_foreign_key "samplereviewmaps", "assignments"
+  add_foreign_key "samplereviewmaps", "response_maps"
   add_foreign_key "sign_up_topics", "assignments", name: "fk_sign_up_topics_assignments"
   add_foreign_key "signed_up_teams", "sign_up_topics", column: "topic_id", name: "fk_signed_up_users_sign_up_topics"
   add_foreign_key "survey_deployments", "questionnaires"
@@ -818,3 +830,4 @@ ActiveRecord::Schema.define(version: 20181205201208) do
   add_foreign_key "teams_users", "teams", name: "fk_users_teams"
   add_foreign_key "teams_users", "users", name: "fk_teams_users"
 end
+
